@@ -16,17 +16,21 @@
 				</div>
 				<nav id="nav-menu-container">
 					<ul class="nav-menu">
-						<li class="menu-active"><a href="<?=base_url ('home') ?>">Home</a></li>
-						<li><a href="<?=base_url ('adart') ?>">AD/ART</a></li>
-                        <li><a href="<?=base_url ('struktur_organisasi') ?>">Struktur Organisasi</a></li>
-						<li class="menu-has-children"><a href="">Layanan</a>
+						<li class="<?= $this->uri->segment(1) == 'home' ? 'menu-active' : '' ?>"><a href="<?=base_url ('home') ?>">Home</a></li>
+						<li class="<?= $this->uri->segment(1) == 'adart' ? 'menu-active' : '' ?>"><a href="<?=base_url ('adart') ?>">AD/ART</a></li>
+                        <li class="<?= $this->uri->segment(1) == 'struktur_organisasi' ? 'menu-active' : '' ?>"><a href="<?=base_url ('struktur_organisasi') ?>">Struktur Organisasi</a></li>
+						<li class="menu-has-children <?= $this->uri->segment(2) == 'reservasi' || $this->uri->segment(2) == 'pembatalan' ? 'menu-active' : '' ?>"><a href="">Layanan</a>
 							<ul>
 								<li><a href="<?=base_url ('reservasi/reservasi') ?>">Reservasi</a></li>
 								<li><a href="<?=base_url ('reservasi/pembatalan') ?>">Pembatalan</a></li>
 							</ul>
 						</li>
-                        <li><a href="<?=base_url ('reservasi/penjadwalan') ?>">Penjadwalan</a></li>
-                        <li><a href="<?=base_url ('login') ?>">Login</a></li>
+                        <li class="<?= $this->uri->segment(2) == 'penjadwalan' ? 'menu-active' : '' ?>"><a href="<?=base_url ('reservasi/penjadwalan') ?>">Penjadwalan</a></li>
+						<?php if($this->session->userdata('is_logged_in') == true): ?>
+							<li><a href="<?=base_url ('login') ?>"><?=$this->session->userdata('nama')?></a></li>
+						<?php else: ?>	
+							<li><a href="<?=base_url ('login') ?>">Login</a></li>
+						<?php endif; ?>
 
 					</ul>
 				</nav><!-- #nav-menu-container -->
@@ -86,17 +90,17 @@
 				<div class="col-lg-3 col-md-6 single-footer-widget">
 					<h4>Alamat</h4>
 					<ul>
-						<li><a>Gedung Utama lantai 3</a></li>
-						<li><a>Politeknik Negeri Cilacap</a></li>
-						<li><a>Jl.Dr.Soetomo No.1 Sidakaya</a></li>
-						<li><a>Cilacap 53212 Jawa Tengah</a></li>
+						<li><a>Sekertariat</a></li>
+						<li><a>Jl.Kemerdekaan Barat No. 631 RT 04 Rw 05</a></li>
+						<li><a>Desa Kesugihan Kabupaten Cilacap</a></li>
+						<li><a>(53274)</a></li>
 					</ul>
 				</div>
 				
 				<div class="col-lg-3 col-md-6 single-footer-widget">
 					<h4>Kontak Kami</h4>
 					<ul>
-						<li><a>Telepon (0282)533329</a></li>
+						<li><a>Hp 0812296824222</a></li>
 						<li><a>Fax. (0282)537992</a></li>
 						<li><a>Email : poltec@politeknikcilacap.ac.id</a></li>
 					</ul>
@@ -152,6 +156,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="<?= base_url ('assets/guest/') ?>js/jquery.counterup.min.js"></script>
 	<script src="<?= base_url ('assets/guest/') ?>js/mail-script.js"></script>
 	<script src="<?= base_url ('assets/guest/') ?>js/main.js"></script>
+	<script src="<?= base_url('assets/admin/assets/js/lodash.js') ?>"></script>
 </body>
 
 </html>

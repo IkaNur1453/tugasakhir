@@ -1,17 +1,18 @@
 <?php
 
-class M_Galeri Extends CI_Model
-
+class M_Kabupaten extends CI_Model
 {
-    var $table = 'galeri';
-    var $column_order = array(null,'judul','deskripsi','file',null); //set column field database for datatable orderable
-    var $column_search = array('nama'); //set column field database for datatable searchable just firstname , lastname , address are searchable
-    var $order = array('id' => 'desc'); // default order 
+
+    var $table = "kabupaten";
+    var $column_order = array(null,'nama_kabupaten', 'harga', null); //set column field database for datatable orderable
+    var $column_search = array('nama_kabupaten', 'harga'); //set column field database for datatable searchable just firstname , lastname , address are searchable
+    var $order = array('id_kabupaten' => 'desc'); // default order 
 
     private function _get_datatables_query()
     {
-        $this->db->where('is_active', 1);
+         
         $this->db->from($this->table);
+        $this->db->where('is_active', 1);
  
         $i = 0;
      
@@ -46,7 +47,7 @@ class M_Galeri Extends CI_Model
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
- 
+
     function get_datatables()
     {
         $this->_get_datatables_query();
@@ -65,50 +66,55 @@ class M_Galeri Extends CI_Model
  
     public function count_all()
     {
-        $this->db->where('is_active', 1);
         $this->db->from($this->table);
+        $this->db->where('is_active', 1);
         return $this->db->count_all_results();
+
+    }
+
+    public function get_all(){
+        $this->db->from($this->table);
+        $this->db->where('is_active', 1);
+        $query = $this->db->get();
+
+        return $query->result();
     }
 
     public function get_by_id($id)
     {
         $this->db->from($this->table);
-        $this->db->where('id',$id);
+        $this->db->where('id_kabupaten',$id);
         $query = $this->db->get();
  
         return $query->row();
     }
 
-    public function get_by_where_row($where)
-    {
+    public function get_by_where($where){
+        
         $this->db->from($this->table);
         $this->db->where($where);
         $query = $this->db->get();
-
-        return $query->row(); //menampilkan tabel satu baris
+ 
+        return $query->result();
     }
 
-    public function get_by_where($where)
-    {
-        $this->db->from($this->table);
-        $this->db->where($where);
-        $query = $this->db->get();
-
-        return $query->result(); //lebiih dari satu baris
-    }
 
     public function save($data)
     {
-        $this->db->insert($this->table, $data); //menyimpan data
-
+        $this->db->insert($this->table, $data);
         return $this->db->insert_id();
     }
-
-    public function update($where,$data)
+ 
+    public function update($where, $data)
     {
         $this->db->update($this->table, $data, $where);
-
         return $this->db->affected_rows();
     }
+ 
+    public function delete_by_id($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete($this->table);
+    }
+
 }
-?>

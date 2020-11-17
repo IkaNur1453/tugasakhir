@@ -49,18 +49,37 @@
                             <li class="menu-title">Navigation</li>
 
                             <li>
-                                <a href="index.html">
+                                <a href="<?= base_url('dashboard') ?>">
                                     <i data-feather="home"></i>
-                                    <span class="badge badge-success float-right">1</span>
                                     <span> Dashboard </span>
                                 </a>
                             </li>
 
                             <li>
-                                <a href="index.html">
+                                <a href="<?= base_url('user') ?>">
                                     <i data-feather="user-check"></i>
-                                    <span class="badge badge-success float-right">1</span>
-                                    <span> Kelola User </span>
+                                    <span> User </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="<?= base_url('kabupaten') ?>">
+                                    <i data-feather="globe"></i>
+                                    <span> Kabupaten </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="<?= base_url('layanan') ?>">
+                                    <i data-feather="globe"></i>
+                                    <span> Layanan </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="<?= base_url('galeri') ?>">
+                                    <i data-feather="globe"></i>
+                                    <span> Galeri </span>
                                 </a>
                             </li>
 

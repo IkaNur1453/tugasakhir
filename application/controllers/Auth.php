@@ -62,6 +62,7 @@ class Auth extends CI_Controller
                 if($level == $checkLogin->level){
                     $data = [
                         'id'           => $checkLogin->id,
+                        'username'     => $checkLogin->username,
                         'level'        => $checkLogin->level,
                         'is_logged_in' => true
                     ];
@@ -92,9 +93,10 @@ class Auth extends CI_Controller
     {
         $this->session->unset_userdata('id');
         $this->session->unset_userdata('is_logged_in');
+        $this->session->unset_userdata('nama');
         $this->session->set_flashdata('success', '<div class="alert alert-success alert-dismissible"><button type "button" class="close" data-dismiss="alert"><span>&times;</span></button> Akun anda berhasil logout !!!</div>');
 
-        redirect('kamar');
+        redirect('home');
     }
 }
 ?>

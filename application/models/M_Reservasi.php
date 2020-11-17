@@ -25,7 +25,7 @@ class M_Reservasi Extends CI_Model
 
     public function save($data)
     {
-        $this->db->insert($this->table, data); //menyimpan data
+        $this->db->insert($this->table, $data); //menyimpan data
 
         return $this->db->insert_id();
     }
