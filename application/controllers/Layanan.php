@@ -100,4 +100,11 @@ class Layanan extends CI_Controller
         echo json_encode($layanan);
     }
 
+    public function getById($id)
+    {
+        $layanan = $this->layanan->get_by_id($id);
+
+        echo json_encode($layanan);
+    }
+
 }

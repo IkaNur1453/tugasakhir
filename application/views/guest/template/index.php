@@ -6,7 +6,8 @@
 </head>
 
 <body>
-
+<script src="<?= base_url ('assets/guest/') ?>js/vendor/jquery-2.2.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
 	<!-- Start Header Area -->
 	<header id="header">
 		<div class="container">
@@ -27,7 +28,7 @@
 						</li>
                         <li class="<?= $this->uri->segment(2) == 'penjadwalan' ? 'menu-active' : '' ?>"><a href="<?=base_url ('reservasi/penjadwalan') ?>">Penjadwalan</a></li>
 						<?php if($this->session->userdata('is_logged_in') == true): ?>
-							<li><a href="<?=base_url ('login') ?>"><?=$this->session->userdata('nama')?></a></li>
+							<li><a href="<?=base_url ('profile') ?>"><?=$this->session->userdata('nama')?></a></li>
 						<?php else: ?>	
 							<li><a href="<?=base_url ('login') ?>">Login</a></li>
 						<?php endif; ?>
@@ -136,7 +137,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</div>
 	<!-- ####################### End Scroll to Top Area ####################### -->
 
-	<script src="<?= base_url ('assets/guest/') ?>js/vendor/jquery-2.2.4.min.js"></script>
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
 	 crossorigin="anonymous"></script>
 	<script src="<?= base_url ('assets/guest/') ?>js/vendor/bootstrap.min.js"></script>
@@ -157,6 +158,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="<?= base_url ('assets/guest/') ?>js/mail-script.js"></script>
 	<script src="<?= base_url ('assets/guest/') ?>js/main.js"></script>
 	<script src="<?= base_url('assets/admin/assets/js/lodash.js') ?>"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
 </body>
 
 </html>

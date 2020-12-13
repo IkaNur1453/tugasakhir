@@ -1,6 +1,9 @@
 <section class="faculty-area section-gap">
 		<div class="container">
 			<div class="row align-items-center justify-content-center">
+			<?php if($this->session->flashdata('success')): ?>
+				<?php echo $this->session->flashdata('success'); ?>
+			<?php endif; ?>
 				<div class="col-lg-5 col-md-6 about-left">
 					<img class="img-fluid" src="<?=base_url('assets/guest/')?>img/about.jpg" alt="">
 				</div>

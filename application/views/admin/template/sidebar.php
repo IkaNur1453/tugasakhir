@@ -84,7 +84,7 @@
                             </li>
 
                             <li>
-                                <a href="index.html">
+                                <a href="<?= base_url('reservasi') ?>">
                                     <i data-feather="check-square"></i>
                                     <span class="badge badge-success float-right">1</span>
                                     <span> Reservasi </span>

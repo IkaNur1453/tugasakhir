@@ -93,4 +93,10 @@ class Kabupaten extends CI_Controller
         echo json_encode(array("status" => TRUE));
     }
 
+    public function getKabupatenById($id)
+    {
+        $kabupaten = $this->kabupaten->get_by_id($id);
+        
+        echo json_encode($kabupaten);
+    }
 }
