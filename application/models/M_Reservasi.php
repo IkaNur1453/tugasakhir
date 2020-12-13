@@ -110,7 +110,7 @@ class M_Reservasi Extends CI_Model
         return $this->db->insert_id();
     }
 
-    public function konfirmasiPembayaran()
+    public function saveKonfirmasiPembayaran()
     {
         $this->db->insert($this->table_konfirmasi, $data);
 
