@@ -32,7 +32,7 @@
 
         <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
         <!-- Begin page -->
         <div id="wrapper">
 
@@ -69,7 +69,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <?= date('Y') ?> &copy; Shreyu. All Rights Reserved. Crafted with <i class='uil uil-heart text-danger font-size-12'></i> by <a href="https://coderthemes.com" target="_blank">Coderthemes</a>
+                                <?= date('Y') ?> &copy;POLITEKNIK NEGERI CILACAP. <i class='uil uil-heart text-danger font-size-12'></i> TEKNIK INFORMATIKA
                             </div>
                         </div>
                     </div>

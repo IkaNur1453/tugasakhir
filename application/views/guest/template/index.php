@@ -28,9 +28,20 @@
 						</li>
                         <li class="<?= $this->uri->segment(2) == 'penjadwalan' ? 'menu-active' : '' ?>"><a href="<?=base_url ('reservasi/penjadwalan') ?>">Penjadwalan</a></li>
 						<?php if($this->session->userdata('is_logged_in') == true): ?>
-							<li><a href="<?=base_url ('profile') ?>"><?=$this->session->userdata('nama')?></a></li>
+							<li class="menu-has-children">
+								<a href="#"><?=$this->session->userdata('nama')?></a>
+								<ul>
+									<li><a href="<?=base_url ('profile') ?>">Profile</a></li>
+									<li><a href="<?=base_url ('auth/logout') ?>">Log Out</a></li>
+								</ul>
+							</li>
 						<?php else: ?>	
-							<li><a href="<?=base_url ('login') ?>">Login</a></li>
+							<li class="menu-has-children"><a href="#">Login</a>
+								<ul>
+									<li><a href="<?=base_url ('login') ?>">Login</a></li>
+									<li><a href="<?=base_url ('register') ?>">Register</a></li>
+								</ul>
+							</li>
 						<?php endif; ?>
 
 					</ul>

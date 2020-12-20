@@ -7,6 +7,7 @@ class User extends CI_Controller
         parent::__construct();
 
         $this->load->model('M_User', 'user');
+        $this->load->model('M_reservasi', 'reservasi');
         $this->load->library('template');
     }
 
@@ -52,6 +53,7 @@ class User extends CI_Controller
     {
         $data['page'] = 'Detail Pelanggan';
         $data['user'] = $this->user->get_by_where_row(array("id" => $id));
+        $data['reservasi'] = $this->reservasi->get_by_where(array("id_user" => $id));
         $this->template->layout('admin/pelanggan/detail', $data);
     } 
 }

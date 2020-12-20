@@ -59,6 +59,10 @@ class Reservasi extends CI_Controller
             {
                 $row[] = '<i class="text-success fas fa-circle"></i> '.$reservasi->status;
             }
+            else if($reservasi->status == "menunggu")
+            {
+                $row[] = '<i class="text-warning fas fa-circle"></i> '.$reservasi->status;
+            }
         
             //add html for action
             $row[] = '<a class="btn btn-outline-success" href="'.base_url('reservasi/detail/'.$reservasi->id).'"> Detail </a>';
@@ -120,14 +124,15 @@ class Reservasi extends CI_Controller
         }
         else{
             $data = array(
-                "id_user"               => $this->session->userdata('id'),
-                "tgl_pesan"             => date('Y-m-d', strtotime($this->input->post('tanggal_reservasi'))),
-                "alamat"                => $this->input->post('alamat'),
-                "acara"                 => $this->input->post('acara'),
-                "dp"                    => $this->input->post('dp', true),
-                "status_pembayaran"     => $this->input->post('pembayaran'),
-                "id_kabupaten"          =>$this->input->post('kabupaten'),
-                "invoice"               => random_strings(16)
+                "id_user"                       => $this->session->userdata('id'),
+                "tgl_pesan"                     => date('Y-m-d', strtotime($this->input->post('tanggal_reservasi'))),
+                "tanggal_berakhir_pembayaran"   => date('Y-m-d H:i:s', strtotime('+1 day', time())),
+                "alamat"                        => $this->input->post('alamat'),
+                "acara"                         => $this->input->post('acara'),
+                "dp"                            => $this->input->post('dp', true),
+                "status_pembayaran"             => $this->input->post('pembayaran'),
+                "id_kabupaten"                  =>$this->input->post('kabupaten'),
+                "invoice"                       => random_strings(16)
             );
 
             $reservasi = $this->reservasi->save($data); //mengambil fungsi dari M_User
@@ -206,7 +211,7 @@ class Reservasi extends CI_Controller
             ];
 
             $this->reservasi->update(array("id" => $id), $data);       
-            redirect('home','refresh');
+            redirect('reservasi/info/'.$id,'refresh');
         }
 
     }
@@ -230,6 +235,7 @@ class Reservasi extends CI_Controller
         $data['page'] = 'Detail Reservasi';
         $data['reservasi'] = $this->reservasi->get_by_where_row(array("id" => $id));
         $data['detailReservasi'] = $this->reservasi->getDetailByIdReservasi($id);
+        $data['konfirmasi'] = $this->reservasi->getKonfirmasiPembayaranByIdReservasi($id);
         $this->template->layout('admin/reservasi/detail', $data);
     }
 
@@ -254,7 +260,7 @@ class Reservasi extends CI_Controller
      * 
     */
 
-    public function konfirmasiPembayaran($id)
+    public function konfirmasiPembayaran()
     {	
         if($this->session->userdata('is_logged_in') != true)
         {
@@ -281,17 +287,207 @@ class Reservasi extends CI_Controller
 
     public function prosesKonfirmasi()
     {
-        $invoice = $this->input->post('invoice', true);
+        $config = [
+            array(
+                'field' => 'nama',
+                'label' => 'Nama',
+                'rules' => 'required',
+                'errors' => array(
+                    "required" => "Form %s harus diisi"
+                )
+            ),
+            array(
+                'field' => 'email',
+                'label' => 'E-mail',
+                'rules' => 'required',
+                'errors' => array(
+                    "required" => "Form %s harus diisi"
+                )
+            ),
+            array(
+                'field' => 'tanggal_pembayaran',
+                'label' => 'Tanggal Pembayaran',
+                'rules' => 'required',
+                'errors' => array(
+                    "required" => "Form %s harus diisi"
+                )
+            ),
+            array(
+                'field' => 'jumlah',
+                'label' => 'Jumlah',
+                'rules' => 'required',
+                'errors' => array(
+                    "required" => "Form %s harus diisi"
+                )
+            ),
+            array(
+                'field' => 'bank_tujuan',
+                'label' => 'Bank Tujuan',
+                'rules' => 'required',
+                'errors' => array(
+                    "required" => "Form %s harus diisi"
+                )
+            ),
+            array(
+                'field' => 'namaRek',
+                'label' => 'Nama Rekening',
+                'rules' => 'required',
+                'errors' => array(
+                    "required" => "Form %s harus diisi"
+                )
+            ),
+            array(
+                'field' => 'invoice',
+                'label' => 'Invoice',
+                'rules' => 'required',
+                'errors' => array(
+                    "required" => "Form %s harus diisi"
+                )
+            ),
+            array(
+                'field' => 'pesan',
+                'label' => 'Pesan',
+                'rules' => 'required',
+                'errors' => array(
+                    "required" => "Form %s harus diisi"
+                )
+            ),
+            array(
+                'field' => 'bukti',
+                'label' => '',
+                'rules' => 'callback_checkFileBuktiBayar',
+            ),
+        ];
+      
+           
+        $this->form_validation->set_rules($config);
 
-        $getReservasi = $this->reservasi->get_by_where_row(array("invoice" => $invoice));
+        if($this->form_validation->run() === FALSE)
+        {
+            $this->konfirmasiPembayaran();
+        }
+        else{
+            $invoice = $this->input->post('invoice', true);
+
+            $getReservasi = $this->reservasi->get_by_where_row(array("invoice" => $invoice));
+
+            if($getReservasi)
+            {
+                $data = [
+                    "nama"                  => $this->input->post('nama'),
+                    "id_reservasi"          => $getReservasi->id,
+                    "email"                 => $this->input->post('email'),
+                    "tanggal_pembayaran"    => date('Y-m-d'),
+                    "jumlah"                => $this->input->post('jumlah'),
+                    "bank"                  => $this->input->post('bank_tujuan'),
+                    "nama_rek"              => $this->input->post('namaRek'),
+                    "no_invoice"            => $invoice,
+                    "pesan"                 => $this->input->post('pesan'),    
+                ];
+    
+                if(!empty($_FILES['bukti']['name']))
+                {
+                    $uploadBukti= $this->_uploadBuktiBayar();
+                    $data['bukti_pembayaran'] = $uploadBukti;
+                }
+    
+                $this->reservasi->saveKonfirmasiPembayaran($data);
+                
+                $reservasi['status'] = "menunggu";
+                
+                $this->reservasi->update(array("id" => $getReservasi->id), $reservasi);
+
+                redirect('reservasi/finish/'.$getReservasi->id);
+            }
+            else{
+                $this->konfirmasiPembayaran();
+            }
+        }
+    }
+
+    public function prosesPembatalan($id)
+    {
+        $data = [
+            "status"            => "dibatalkan",
+            "tgl_pembatalan"    => date('Y-m-d'),
+            "alasan_pembatalan" => $this->input->post('pembatalan')
+        ]; 
+
+        $this->reservasi->update(array("id" => $id), $data);
+
+        echo json_encode(array("status" => 201));
+    }
+
+    public function updateKonfirmasi($id)
+    {
+        $data['status'] = $this->input->post('status_pembayaran', true);
+
+        $this->reservasi->update(array('id' => $id), $data);
+
+        echo json_encode(array('status' => 201));
+    }
+
+    public function finish($id)
+    {
+        $getReservasi = $this->reservasi->get_by_where_row(array("id" => $id, "status" => "menunggu"));
+        $data['page']= "Finish";
 
         if($getReservasi)
         {
-            $data = [
-                ""
-            ];
+            $data['pesan'] = '<h2>Terimakasih atas pembayaran anda </h2><p>Silahkan menunggu proses konfirmasi dari admin kami. Kami akan segera menghubungin melalui e-mail yang anda kirimkan.Terimakasih.</p>';
+        }
+        else
+        {
+            $data["pesan"] = '<h1 class="text-danger">MAAF RESERVASI ANDA SUDAH TIDAK TERSEDIA LAGI !!!</h1>';
         }
 
+        $this->template->layout2('guest/reservasi/terimakasih', $data);
+    }
+
+    private function _uploadBuktiBayar()
+    {
+        $config['file_name']   = date('dmYHisu');
+		$config['upload_path'] = './uploads/bukti_bayar/';
+		$config['allowed_types'] = 'jpg|png';
+		$config['max_size'] = '6000';
+		$this->load->library('upload', $config, 'bukti'); // Custom Upload Sertifikat Keahlian
+		$this->bukti->initialize($config);
+
+		if ($this->bukti->do_upload('bukti')) {
+			return $this->bukti->data('file_name');
+		}
+		else{
+			return " ";
+		}
+    }
+
+    public function checkFileBuktiBayar($str)
+    {
+        $check = TRUE;   
+	    if (isset($_FILES['bukti']) && $_FILES['bukti']['size'] != 0) {
+	        $allowedExts = array("jpg", "png", "JPG", "PNG");
+	        $allowedTypes = array(IMAGETYPE_PNG, IMAGETYPE_JPEG);
+	        $extension = pathinfo($_FILES["bukti"]["name"], PATHINFO_EXTENSION);
+	        $detectedType = exif_imagetype($_FILES['bukti']['tmp_name']);
+	        $type = $_FILES['bukti']['type'];
+	        if (!in_array($detectedType, $allowedTypes)) {
+	            $this->form_validation->set_message('checkFileBuktiBayar', 'File yang diupload berupa image/gambar');
+	            $check = FALSE;
+	        }
+	        if(filesize($_FILES['bukti']['tmp_name']) > 500000) {
+	            $this->form_validation->set_message('checkFileBuktiBayar', 'Batas Upload denah masksiman 5 mb');
+	            $check = FALSE;
+	        }
+	        if(!in_array($extension, $allowedExts)) {
+	            $this->form_validation->set_message('checkFileBuktiBayar', "Invalid file extension {$extension}");
+	            $check = FALSE;
+	        }
+	    }
+	    else{
+	    	$this->form_validation->set_message('checkFileBuktiBayar', "Bukti Pembayaran harus diisi");
+	            $check = FALSE;
+	    }
+	    return $check;
     }
 }
 ?>

@@ -1,14 +1,14 @@
 <?php 
 
-function htmlMail($emailCompany, $subject, $message, $attachment = null){
+function htmlMail($email, $subject, $message, $attachment = null){
     $CI = &get_instance();
 
     //setup SMTP configurion
-    $config = Array(    
+    $config = array(    
         'protocol' => 'smtp',
         'smtp_host' => 'ssl://smtp.gmail.com',
         'smtp_user' => 'hendrawankevin97@gmail.com',
-        'smtp_pass' => 'kxodjfyersoxofgk',
+        'smtp_pass' => 'eumoemiwjuhgkaie',
         'smtp_port' => 465,
         'mailtype' => 'html',
         'charset' => 'utf-8',
@@ -19,7 +19,7 @@ function htmlMail($emailCompany, $subject, $message, $attachment = null){
     // $CI->email->set_newline("\r\n");
     $CI->email->from('hendrawankevin97@gmail.com', 'NOT-REPLY');
 
-    $CI->email->to($emailCompany); // replace it with receiver email id
+    $CI->email->to($email); // replace it with receiver email id
     $CI->email->subject($subject); // replace it with email subject
 
     $CI->email->message($message); 

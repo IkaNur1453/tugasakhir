@@ -4,7 +4,7 @@ class M_Reservasi Extends CI_Model
 {
     var $table = 'reservasi';
     var $table_detail_reservation = 'detail_reservasi';
-    var $table_konfirmai = 'konfirmasi_pembayaran';
+    var $table_konfirmasi = 'konfirmasi_pembayaran';
     var $column_order = array(null,'nama','acara','tgl_pesan','nama_kabupaten','alamat','dp','status',null); //set column field database for datatable orderable
     var $column_search = array('nama','acara','tgl_pesan','nama_kabupaten','alamat','dp','status'); //set column field database for datatable searchable just firstname , lastname , address are searchable
     var $order = array('id' => 'desc'); // default order 
@@ -96,6 +96,24 @@ class M_Reservasi Extends CI_Model
         return $data; 
     }
 
+    public function getKonfirmasiPembayaranByIdReservasi($idReservasi)
+    {
+        $this->db->from($this->table_konfirmasi);
+        $this->db->where('id_reservasi', $idReservasi);
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
+    public function getWhereKonfirmasiPembayaran($where)
+    {
+        $this->db->from($this->table_konfirmasi);
+        $this->db->where($where);
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+
     public function save($data)
     {
         $this->db->insert($this->table, $data); //menyimpan data
@@ -110,7 +128,7 @@ class M_Reservasi Extends CI_Model
         return $this->db->insert_id();
     }
 
-    public function saveKonfirmasiPembayaran()
+    public function saveKonfirmasiPembayaran($data)
     {
         $this->db->insert($this->table_konfirmasi, $data);
 

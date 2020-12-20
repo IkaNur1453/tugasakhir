@@ -24,7 +24,11 @@
                     </tr>
                     <tr height="30px">
                         <th width="150px">Tanggal Pesan</th>
-                        <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= date('Y/m/d', strtotime($reservasi->tgl_pesan)) ?></th>
+                        <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= date('d/m/Y', strtotime($reservasi->tgl_pesan)) ?></th>
+                    </tr>   
+                    <tr height="30px">
+                        <th width="150px">Tanggal Expire Pembayaran</th>
+                        <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= date('d/m/Y', strtotime($reservasi->tanggal_berakhir_pembayaran)) ?></th>
                     </tr>   
                     <tr height="30px">
                         <th width="150px">DP</th>
@@ -33,8 +37,9 @@
                     <tr height="30px">
                         <th width="150px">Status Reservasi</th>
                         <th style="border-bottom:1px solid #D1DBE0;" width="800px">
-                            <select name="" class="form-control" id="">
+                            <select name="status" class="form-control" id="">
                                 <option value="belum" <?=$reservasi->status == 'belum' ? 'selected' : ''?>>Belum</option>
+                                <option value="belum" <?=$reservasi->status == 'menunggu' ? 'selected' : ''?>>Menunggu</option>
                                 <option value="sudah" <?=$reservasi->status == 'sudah' ? 'selected' : ''?>>Sudah</option>
                             </select>
                         </th>
@@ -95,23 +100,74 @@
                     </table>
                 </div>
                 <div class="tab-pane" id="profile">
-                    <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
-                        In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.
-                        Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras
-                        dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend
-                        tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend
-                        ac, enim.</p>
-                    <p class="mb-0">Vakal text here dolor sit amet, consectetuer adipiscing
-                        elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                        natoque penatibus et magnis dis parturient montes, nascetur
-                        ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
-                        pretium quis, sem. Nulla consequat massa quis enim.</p>
+                    <h4>Data Pembayaran</h4>
+                    <?php if($konfirmasi):  ?>
+                        <table class="mb-5 mt-5">
+                            <tr height="30px">
+                                <th width="150px">Nama Pengirim</th>
+                                <th style="border-bottom:1px solid #D1DBE0;" width="800px"> <?= $konfirmasi->nama ?></th>
+                            </tr>
+                            <tr height="30px">
+                                <th width="150px">E-mail</th>
+                                <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= $konfirmasi->email ?></th>
+                            </tr>
+                            <tr height="30px">
+                                <th width="150px">Tanggal pembayaran</th>
+                                <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?=  date('d/m/Y', strtotime($konfirmasi->tanggal_pembayaran))  ?></th>
+                            </tr>
+                            <tr height="30px">
+                                <th width="150px">Jumlah Pembayaran</th>
+                                <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= number_format($konfirmasi->jumlah) ?></th>
+                            </tr>
+                            <tr height="30px">
+                                <th width="150px">Nama Bank Pengirim</th>
+                                <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= $konfirmasi->bank ?></th>
+                            </tr>   
+                            <tr height="30px">
+                                <th width="150px">Nama Pemilik Rekening</th>
+                                <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= $konfirmasi->nama_rek ?></th>
+                            </tr>
+                            <tr height="30px">
+                                <th width="150px">No Invoice</th>
+                                <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= $konfirmasi->no_invoice ?></th>
+                            </tr>
+                            <tr height="30px">
+                                <th width="150px">Pesan</th>
+                                <th style="border-bottom:1px solid #D1DBE0;" width="800px"><?= $konfirmasi->pesan ?></th>
+                            </tr>
+                        </table>
+
+                        <img src="<?= base_url('uploads/bukti_bayar/'.$konfirmasi->bukti_pembayaran) ?>" class="img img-responsive" alt="">
+                    <?php else: ?>
+                        <h5 class="text-danger">Maaf Belum ada konfirmasi Pembayaran dari pihak terkait</h5>
+                    <?php endif; ?>
                 </div>
             </div>
 
        </div>
     </div>
 </div>
+
+<script>
+    $('[name="status"]').change(function(){
+        let status = $(this).val();
+
+        $.ajax({
+            url: "<?= base_url('reservasi/updateKonfirmasi/'.$reservasi->id) ?>",
+            type: "POST",
+            data: {status_pembayaran : status},
+            dataType: "JSON",
+            success:function(res)
+            {
+                console.log(res.status);
+                if(res.status == "201")
+                {
+                    toastr.success('Data berhasil diubah');
+                }
+            }  
+        });
+    });
+</script>
 
 
 <!-- end row -->

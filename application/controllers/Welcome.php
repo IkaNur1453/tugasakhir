@@ -18,6 +18,14 @@ class Welcome extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->load->helper('all');
+	}
+
 	public function index()
 	{
 		$this->load->view('welcome_message');
@@ -34,5 +42,11 @@ class Welcome extends CI_Controller {
 		];
 
 		$this->db->insert('users', $data);
+	}
+
+	public function mail()
+	{
+		$emailTemplate = $this->load->view('email/default', '',TRUE);
+		htmlMail('hendrawankevin97@gmail.com', 'TEST KIRIM E-MAIL', $emailTemplate);
 	}
 }
